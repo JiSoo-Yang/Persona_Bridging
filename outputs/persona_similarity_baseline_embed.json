@@ -1,0 +1,19 @@
+{
+  "error": "Could not parse predicted persona JSON from Baseline output.",
+  "ground_truth": {
+    "social_role": "Software Engineer",
+    "personality": {
+      "trait": "openness",
+      "value": "yes"
+    },
+    "background": {
+      "category": "age_group",
+      "value": "Teens"
+    },
+    "interests": {
+      "category": "content_preferences",
+      "value": "Education / Learning"
+    }
+  },
+  "predicted": {}
+}

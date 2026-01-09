@@ -1,0 +1,145 @@
+{
+  "version": "2.0",
+  "description": "Linguistic Bridging Inference Relations - Definitions for implicit discourse connections",
+  "bridging_types": {
+    "mereological": {
+      "name": "Mereological Relations",
+      "description": "Physical or abstract part-whole structures",
+      "relations": [
+        {
+          "relation_type": "part-of",
+          "anchor_concept": "room",
+          "anaphor_concept": "ceiling",
+          "definition": "A physical or abstract part of a larger whole",
+          "example": {
+            "text": "I looked into the room. The ceiling was very high.",
+            "explanation": "The ceiling is a part of the room - requires background knowledge about spatial structures"
+          },
+          "inference_required": "World knowledge about physical structures"
+        },
+        {
+          "relation_type": "member-of",
+          "anchor_concept": "set",
+          "anaphor_concept": "element",
+          "definition": "A member or element of a collection, group, or set",
+          "example": {
+            "text": "The class was diverse. One student stood out.",
+            "explanation": "A student is a member of the class - requires understanding of set-element relationships"
+          },
+          "inference_required": "Understanding of set and element relationships"
+        }
+      ]
+    },
+    "frame_related": {
+      "name": "Frame-related Relations",
+      "description": "Role relationships within semantic frames",
+      "relations": [
+        {
+          "relation_type": "instrument",
+          "anchor_concept": "murder (event)",
+          "anaphor_concept": "knife (instrument)",
+          "definition": "A tool or instrument used within an action frame",
+          "example": {
+            "text": "John was murdered yesterday. The knife lay nearby.",
+            "explanation": "The knife is an instrument in the murder event frame - requires understanding of typical murder scenarios"
+          },
+          "inference_required": "Knowledge of event frames and their typical instruments"
+        },
+        {
+          "relation_type": "theme",
+          "anchor_concept": "event",
+          "anaphor_concept": "argument",
+          "definition": "A central theme or topic within a conceptual frame",
+          "example": {
+            "text": "The conference focused on AI ethics. Privacy concerns were raised.",
+            "explanation": "Privacy concerns are arguments/themes within the AI ethics event - requires frame understanding"
+          },
+          "inference_required": "Understanding of event frames and their themes"
+        },
+        {
+          "relation_type": "cause-of",
+          "anchor_concept": "eventuality",
+          "anaphor_concept": "cause",
+          "definition": "Causal relationship between events or states",
+          "example": {
+            "text": "The storm was severe. Many buildings collapsed.",
+            "explanation": "The storm caused the buildings to collapse - requires causal reasoning"
+          },
+          "inference_required": "World knowledge about causal relationships"
+        },
+        {
+          "relation_type": "in",
+          "anchor_concept": "eventuality",
+          "anaphor_concept": "location",
+          "definition": "Spatial containment or location relationship",
+          "example": {
+            "text": "We visited Paris. The museum was crowded.",
+            "explanation": "The museum is located in Paris - requires understanding of spatial relationships"
+          },
+          "inference_required": "Spatial relationship understanding"
+        },
+        {
+          "relation_type": "temporal",
+          "anchor_concept": "eventuality",
+          "anaphor_concept": "time",
+          "definition": "Temporal relationship between events",
+          "example": {
+            "text": "The meeting started. Five minutes later, the CEO arrived.",
+            "explanation": "The CEO's arrival is temporally related to the meeting start - requires temporal reasoning"
+          },
+          "inference_required": "Understanding of temporal sequence"
+        }
+      ]
+    }
+  },
+  "extraction_guidelines": {
+    "focus": "Focus only on implicit relations that require inference",
+    "requirements": [
+      "The anaphor should NOT be directly mentioned in the same sentence as the anchor",
+      "Relations must require world knowledge or conceptual frame understanding",
+      "Simple co-reference is NOT bridging (e.g., 'the car... it')"
+    ],
+    "non_examples": [
+      {
+        "text": "The car broke down. It needed repair.",
+        "reason": "Simple co-reference - 'it' directly refers to 'the car'"
+      },
+      {
+        "text": "John entered. John sat down.",
+        "reason": "Repetition of the same entity"
+      }
+    ]
+  },
+  "output_format": {
+    "description": "Format for bridging relation extraction results",
+    "schema": {
+      "bridging_relations": [
+        {
+          "anchor": "anchor concept (from previous discourse)",
+          "anaphor": "anaphor concept (implicitly connected)",
+          "relation_type": "one of: part-of, member-of, instrument, theme, cause-of, in, temporal",
+          "explanation": "why this is a bridging relation",
+          "sentence_context": "relevant sentences"
+        }
+      ]
+    },
+    "example": {
+      "bridging_relations": [
+        {
+          "anchor": "room",
+          "anaphor": "ceiling",
+          "relation_type": "part-of",
+          "explanation": "Ceiling is part of the room - requires background knowledge",
+          "sentence_context": "I looked into the room. The ceiling was very high."
+        },
+        {
+          "anchor": "murder",
+          "anaphor": "knife",
+          "relation_type": "instrument",
+          "explanation": "Knife is an instrument in the murder event frame",
+          "sentence_context": "John was murdered yesterday. The knife lay nearby."
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,159 @@
+{
+    "version": "2.0",
+    "description": "Linguistic Bridging Inference Relations - 담화에서 암묵적 연결을 위한 브리징 관계 정의",
+    "bridging_types": {
+      "mereological": {
+        "name": "부분-전체 관계 (Mereological)",
+        "description": "물리적 또는 추상적 부분-전체 구조",
+        "relations": [
+          {
+            "relation_type": "part-of",
+            "korean": "부분",
+            "anchor_concept": "room (방)",
+            "anaphor_concept": "ceiling (천장)",
+            "definition": "물리적 또는 추상적으로 더 큰 전체의 일부",
+            "example": {
+              "english": "I looked into the room. The ceiling was very high.",
+              "korean": "방을 들여다봤다. 천장이 매우 높았다.",
+              "explanation": "천장은 방의 일부분이라는 배경지식 필요"
+            },
+            "inference_required": "물리적 구조에 대한 세계 지식"
+          },
+          {
+            "relation_type": "member-of",
+            "korean": "구성원",
+            "anchor_concept": "set (집합)",
+            "anaphor_concept": "element (요소)",
+            "definition": "집합/그룹/세트의 구성원 또는 요소",
+            "example": {
+              "english": "The class was diverse. One student stood out.",
+              "korean": "수업은 다양했다. 한 학생이 눈에 띄었다.",
+              "explanation": "학생은 수업(집합)의 구성원"
+            },
+            "inference_required": "집합과 요소의 관계에 대한 이해"
+          }
+        ]
+      },
+      "frame_related": {
+        "name": "프레임 관련 (Frame-related)",
+        "description": "의미 프레임 내에서의 역할 관계",
+        "relations": [
+          {
+            "relation_type": "instrument",
+            "korean": "도구",
+            "anchor_concept": "murder (살인 사건)",
+            "anaphor_concept": "knife (칼)",
+            "definition": "행위 프레임 내에서 사용되는 도구나 수단",
+            "example": {
+              "english": "John was murdered yesterday. The knife lay nearby.",
+              "korean": "존은 어제 살해당했다. 칼이 근처에 놓여있었다.",
+              "explanation": "살인이라는 사건의 도구로서 칼"
+            },
+            "inference_required": "사건 프레임과 도구의 관계"
+          },
+          {
+            "relation_type": "theme",
+            "korean": "주제",
+            "anchor_concept": "event (사건)",
+            "anaphor_concept": "argument (논점)",
+            "definition": "개념적 프레임 내의 중심 주제나 논점",
+            "example": {
+              "english": "The conference focused on AI ethics. Privacy concerns were raised.",
+              "korean": "회의는 AI 윤리에 초점을 맞췄다. 개인정보 우려가 제기되었다.",
+              "explanation": "살인 사건의 논점으로 프레임화"
+            },
+            "inference_required": "사건과 논점의 프레임 관계"
+          },
+          {
+            "relation_type": "cause-of",
+            "korean": "인과",
+            "anchor_concept": "eventuality (사건/상황)",
+            "anaphor_concept": "cause (원인)",
+            "definition": "사건이나 상태 간의 인과 관계",
+            "example": {
+              "english": "The storm was severe. Many buildings collapsed.",
+              "korean": "폭풍이 심했다. 많은 건물이 무너졌다.",
+              "explanation": "사건과 그 사건의 원인 관계 (복잡한 추론 필요)"
+            },
+            "inference_required": "인과 관계에 대한 세계 지식"
+          },
+          {
+            "relation_type": "in",
+            "korean": "공간",
+            "anchor_concept": "eventuality (사건/상황)",
+            "anaphor_concept": "location (장소)",
+            "definition": "공간적 포함 또는 위치 관계",
+            "example": {
+              "english": "We visited Paris. The museum was crowded.",
+              "korean": "우리는 파리를 방문했다. 박물관은 붐볐다.",
+              "explanation": "사건이 발생한 장소와의 관계 (복잡한 추론 필요)"
+            },
+            "inference_required": "공간적 위치 관계"
+          },
+          {
+            "relation_type": "temporal",
+            "korean": "시간",
+            "anchor_concept": "eventuality (사건/상황)",
+            "anaphor_concept": "time (시간)",
+            "definition": "사건 간의 시간적 관계",
+            "example": {
+              "english": "The meeting started. Five minutes later, the CEO arrived.",
+              "korean": "회의가 시작되었다. 5분 후, CEO가 도착했다.",
+              "explanation": "사건 발생의 시간과의 관계 (복잡한 추론 필요)"
+            },
+            "inference_required": "시간적 순서 관계"
+          }
+        ]
+      }
+    },
+    "extraction_guidelines": {
+      "focus": "암묵적(implicit) 관계에만 집중",
+      "requirements": [
+        "대응어(anaphor)는 앵커(anchor)와 같은 문장에 직접 언급되지 않아야 함",
+        "실제 세계 지식이나 개념적 프레임이 필요한 관계여야 함",
+        "단순한 공지칭(co-reference)은 브리징이 아님 (예: '그 차... 그것')"
+      ],
+      "non_examples": [
+        {
+          "text": "The car broke down. It needed repair.",
+          "reason": "단순 공지칭 - 'it'이 'the car'를 직접 지칭"
+        },
+        {
+          "text": "John entered. John sat down.",
+          "reason": "동일 개체의 반복 언급"
+        }
+      ]
+    },
+    "output_format": {
+      "description": "브리징 관계 추출 결과 형식",
+      "schema": {
+        "bridging_relations": [
+          {
+            "anchor": "앵커 개념 (이전 담화의 개념)",
+            "anaphor": "대응어 (암묵적으로 연결된 개념)",
+            "relation_type": "관계 유형 (part-of, member-of, instrument, theme, cause-of, in, temporal 중 하나)",
+            "explanation": "왜 이것이 브리징 관계인지 설명",
+            "sentence_context": "관련 문장들"
+          }
+        ]
+      },
+      "example": {
+        "bridging_relations": [
+          {
+            "anchor": "room",
+            "anaphor": "ceiling",
+            "relation_type": "part-of",
+            "explanation": "천장은 방의 일부분이라는 배경지식 필요",
+            "sentence_context": "I looked into the room. The ceiling was very high."
+          },
+          {
+            "anchor": "murder",
+            "anaphor": "knife",
+            "relation_type": "instrument",
+            "explanation": "살인 사건 프레임에서 칼은 도구 역할",
+            "sentence_context": "John was murdered yesterday. The knife lay nearby."
+          }
+        ]
+      }
+    }
+  }

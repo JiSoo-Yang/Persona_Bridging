@@ -1,0 +1,255 @@
+{
+    "version": "1.0",
+    "description": "Standard structure and examples for persona definition",
+    "structure": {
+      "social_role": {
+        "description": "1. Occupation and Social Role",
+        "categories": {
+          "professional": {
+            "name": "Professional Roles",
+            "examples": [
+              "Doctor",
+              "Lawyer",
+              "Accountant",
+              "Architect",
+              "Pharmacist",
+              "Professor",
+              "Researcher",
+              "Judge",
+              "Prosecutor",
+              "Patent Attorney",
+              "Real Estate Agent",
+              "Tax Accountant",
+              "Appraiser",
+              "Labor Consultant"
+            ]
+          },
+          "technical_management": {
+            "name": "Technical / Managerial Roles",
+            "examples": [
+              "Software Engineer",
+              "Data Scientist",
+              "Product Manager",
+              "Project Manager",
+              "UX/UI Designer",
+              "System Administrator",
+              "Marketing Manager",
+              "Sales Manager",
+              "HR Specialist",
+              "Finance Manager",
+              "Strategy Planner",
+              "Quality Manager",
+              "DevOps Engineer",
+              "Data Engineer",
+              "Security Specialist"
+            ]
+          },
+          "general_role": {
+            "name": "General Roles",
+            "examples": [
+              "Student",
+              "Homemaker",
+              "Retiree",
+              "Freelancer",
+              "Self-employed",
+              "Office Worker",
+              "Service Worker",
+              "Salesperson",
+              "Factory Worker",
+              "Artist",
+              "Writer",
+              "Content Creator",
+              "Athlete",
+              "Chef"
+            ]
+          }
+        }
+      },
+      "personality": {
+        "description": "2. Personality Traits (Big Five Model)",
+        "categories": [
+          {
+            "openness": {
+              "name": "Openness to Experience",
+              "description": "Openness to new experiences, ideas, and aesthetics",
+              "switch": ["yes", "no"]
+            }
+          },
+          {
+            "conscientiousness": {
+              "name": "Conscientiousness",
+              "description": "Goal orientation, organization, reliability",
+              "switch": ["yes", "no"]
+            }
+          },
+          {
+            "extroversion": {
+              "name": "Extroversion",
+              "description": "Sociability, activity, positive emotions",
+              "switch": ["yes", "no"]
+            }
+          },
+          {
+            "agreeableness": {
+              "name": "Agreeableness",
+              "description": "Cooperativeness, kindness, empathy toward others",
+              "switch": ["yes", "no"]
+            }
+          },
+          {
+            "neuroticism": {
+              "name": "Neuroticism",
+              "description": "Emotional stability, stress tolerance",
+              "switch": ["yes", "no"]
+            }
+          }
+        ]
+      },
+      "background": {
+        "description": "3. Background Information",
+        "categories": {
+          "education": {
+            "name": "Education",
+            "examples": [
+              "High School",
+              "Associate Degree",
+              "Bachelor’s Degree",
+              "Master’s Degree",
+              "Doctorate (Ph.D.)",
+              "Other"
+            ]
+          },
+          "location": {
+            "name": "Location",
+            "examples": ["Metropolitan Area", "Small/Mid-sized City", "Rural Area", "Abroad"]
+          },
+          "family_status": {
+            "name": "Family Status",
+            "examples": [
+              "Single",
+              "Married (No Children)",
+              "Married (With Children)",
+              "Single Parent",
+              "Living Alone"
+            ]
+          },
+          "economic_status": {
+            "name": "Economic Status",
+            "examples": [
+              "Low Income",
+              "Lower-Middle Class",
+              "Middle Class",
+              "Upper-Middle Class",
+              "High Income"
+            ]
+          },
+          "work_experience": {
+            "name": "Work Experience",
+            "examples": [
+              "Entry-level (0–2 years)",
+              "Junior (3–5 years)",
+              "Mid-level (6–10 years)",
+              "Senior (11–15 years)",
+              "Expert (16+ years)"
+            ]
+          }
+        }
+      },
+      "interests": {
+        "description": "4. Preferences and Interests",
+        "categories": {
+          "hobbies": {
+            "name": "Hobbies / Leisure",
+            "examples": [
+              "Reading",
+              "Fitness / Exercise",
+              "Cooking",
+              "Traveling",
+              "Photography / Videography",
+              "Gaming",
+              "Listening to / Playing Music",
+              "Drawing / Crafts",
+              "Hiking / Camping",
+              "Watching Movies / TV Shows",
+              "Fashion / Beauty",
+              "Pet Care",
+              "Gardening"
+            ]
+          },
+          "content_preferences": {
+            "name": "Content Preferences",
+            "examples": [
+              "News / Current Affairs",
+              "Education / Learning",
+              "Entertainment",
+              "Sports",
+              "Technology / Science",
+              "Business / Economy",
+              "Health / Wellness",
+              "Lifestyle",
+              "Arts / Culture",
+              "Politics / Society"
+            ]
+          },
+          "technology_adoption": {
+            "name": "Technology Adoption Level",
+            "examples": [
+              "Early Adopter",
+              "Active User",
+              "Average User",
+              "Conservative User",
+              "Tech-averse"
+            ]
+          },
+          "shopping_style": {
+            "name": "Shopping Style",
+            "examples": [
+              "Value-oriented",
+              "Quality-focused",
+              "Brand-focused",
+              "Trendy",
+              "Practical",
+              "Impulse Buyer",
+              "Planned Buyer"
+            ]
+          },
+          "communication_style": {
+            "name": "Communication Style",
+            "examples": [
+              "Direct",
+              "Indirect",
+              "Formal",
+              "Informal",
+              "Emotional",
+              "Logical",
+              "Concise",
+              "Detailed"
+            ]
+          },
+          "values": {
+            "name": "Values",
+            "examples": [
+              "Achievement / Success",
+              "Family",
+              "Health",
+              "Freedom",
+              "Stability",
+              "Creativity",
+              "Social Contribution",
+              "Environmental Protection",
+              "Fairness",
+              "Tradition",
+              "Innovation",
+              "Knowledge / Learning",
+              "Reputation",
+              "Financial Security"
+            ]
+          },
+          "social_media_usage": {
+            "name": "Social Media Usage",
+            "examples": ["no", "yes"]
+          }
+        }
+      }
+    }
+  }

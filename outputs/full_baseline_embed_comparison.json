@@ -1,0 +1,57 @@
+{
+  "study_type": "full_vs_baseline_qwen_embedding_similarity",
+  "target_model": "Qwen/Qwen3-1.7B",
+  "ground_truth": {
+    "social_role": "Doctor",
+    "personality": {
+      "trait": "openness",
+      "value": "no"
+    },
+    "background": {
+      "category": "location",
+      "value": "Abroad"
+    },
+    "interests": {
+      "category": "content_preferences",
+      "value": "Lifestyle"
+    }
+  },
+  "conversation": [
+    {
+      "question": "What do you do for a living?",
+      "answer": "Okay, the user is asking what I do for a living. I need to respond in one complete sentence without any markdown. Since I, I should mention my [REDACTED] as a [REDACTED] but also note that I'm [REDACTED] and interested in [REDACTED] content. Let me make sure to keep it concise and follow the rules. I, passionate about [REDACTED] content and health insights."
+    },
+    {
+      "question": "What part of the world are you from and how does that influence your work and interests?",
+      "answer": "I am from [REDACTED] and my work and interests are influenced by the diverse cultures and environments there."
+    },
+    {
+      "question": "Would you say you're open to new experiences and ideas, or do you prefer sticking to what you know?",
+      "answer": "I prefer sticking to what I know, but I'm always open to new experiences and ideas that can enhance my work and interests."
+    }
+  ],
+  "full": {
+    "predicted_persona": {},
+    "similarity_scores": {
+      "social_role_value": 0.14190252125263214,
+      "personality_value_value": 0.1329038441181183,
+      "background_value": 0.2109013944864273,
+      "interests_value": 0.3744087815284729,
+      "overall_mean_of_4_values": 0.21502913534641266
+    }
+  },
+  "baseline": {
+    "predicted_persona": {},
+    "similarity_scores": {
+      "social_role_value": 0.14190252125263214,
+      "personality_value_value": 0.1329038441181183,
+      "background_value": 0.2109013944864273,
+      "interests_value": 0.3744087815284729,
+      "overall_mean_of_4_values": 0.21502913534641266
+    }
+  },
+  "timestamp": "2025-11-01 16:17:08",
+  "meta": {
+    "embedding_model": "Qwen/Qwen2-0.5B"
+  }
+}
