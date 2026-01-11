@@ -81,7 +81,7 @@ HF_TOKEN=your-huggingface-token-here  # Optional, for gated models
 ### Run the System
 
 ```bash
-python test_qwen3.py
+python test_qwen.py
 ```
 
 The system will:
@@ -105,21 +105,6 @@ outputs/
 └── persona_similarity.json                  # Evaluation scores
 ```
 
-## 🔬 Evaluation Metrics
-
-The system evaluates persona predictions using **cosine similarity** of Qwen embeddings:
-
-```
-📊 GT vs Predicted - Qwen Embedding Similarity (Cosine)
-═══════════════════════════════════════════════════════
-1️⃣  Social Role:     0.8523
-2️⃣  Personality:     0.7891
-3️⃣  Background:      0.8234
-4️⃣  Interests:       0.7645
-────────────────────────────────────────────────────────
-📈 OVERALL AVERAGE:  0.8073
-════════════════════════════════════════════════════════
-```
 
 ## 🧠 Key Concepts
 
@@ -195,120 +180,6 @@ This prevents the Tool Agent from trivially extracting persona attributes throug
   }
 }
 ```
-
-## 🎛️ Customization
-
-### Change Target Model
-
-```python
-# In test_qwen3.py
-TARGET_MODEL = "Qwen/Qwen3-1.7B"  # Change to any HF model
-# Examples: "meta-llama/Llama-2-7b-chat-hf", "mistralai/Mistral-7B-v0.1"
-```
-
-### Adjust Interview Length
-
-```python
-run_interview_system(
-    openai_api_key=OPENAI_API_KEY,
-    target_model_name=TARGET_MODEL,
-    num_questions=5,  # Change number of questions
-    device="cpu"
-)
-```
-
-### Modify Tool Agent Model
-
-```python
-# In test_qwen3.py
-TOOL_MODEL = 'gpt-4'  # Change to 'gpt-4-turbo', 'gpt-3.5-turbo', etc.
-```
-
-## 📈 Research Applications
-
-This system is designed for research in:
-- **Persona inference** from conversational data
-- **Bridging discourse analysis** in dialogue systems
-- **Multi-agent LLM interaction** patterns
-- **Implicit reasoning** in language models
-- **Persona consistency** evaluation
-
-## 🛠️ Technical Details
-
-### Bridging Extraction Pipeline
-
-1. **Conversation Collection**: Agent asks strategic questions
-2. **Utterance Analysis**: Parse Q&A pairs into discourse units
-3. **Relation Identification**: Detect implicit connections requiring inference
-4. **Graph Construction**: Build directed graph with weighted edges
-5. **Centrality Scoring**: Compute PageRank/betweenness for importance ranking
-
-### Embedding Similarity Computation
-
-```python
-# For each persona attribute
-embedding_gt = encode_with_qwen(ground_truth_value)
-embedding_pred = encode_with_qwen(predicted_value)
-similarity = cosine_similarity(embedding_gt, embedding_pred)
-```
-
-## 📝 Citation
-
-If you use this system in your research, please cite:
-
-```bibtex
-@software{persona_interview_system,
-  title={Persona Interview System with Bridging Inference},
-  author={Your Name},
-  year={2025},
-  url={https://github.com/yourusername/persona-interview-system}
-}
-```
-
-## 🤝 Contributing
-
-Contributions are welcome! Areas for improvement:
-- Additional bridging relation types
-- Multi-turn dialogue strategies
-- Alternative evaluation metrics
-- Support for multilingual personas
-
-## 📄 License
-
-[MIT License](LICENSE)
-
-## 🔍 Troubleshooting
-
-### Common Issues
-
-**Issue**: `OPENAI_API_KEY not found`
-```bash
-# Solution: Create .env file with your API key
-echo "OPENAI_API_KEY=sk-..." > .env
-```
-
-**Issue**: Model download fails
-```bash
-# Solution: Set HF_TOKEN for gated models
-export HF_TOKEN=hf_...
-```
-
-**Issue**: Out of memory on GPU
-```bash
-# Solution: Force CPU execution
-device="cpu"  # In run_interview_system()
-```
-
-**Issue**: Thread warnings on macOS
-```bash
-# Already handled in code via:
-os.environ["TOKENIZERS_PARALLELISM"] = "false"
-matplotlib.use('Agg')
-```
-
-## 📧 Contact
-
-For questions or collaboration: [your.email@example.com]
 
 ---
 
