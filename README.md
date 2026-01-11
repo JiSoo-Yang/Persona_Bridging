@@ -42,15 +42,7 @@ This system demonstrates a novel approach to persona inference by:
 
 ### Core Scripts
 
-- **`test_qwen.py`** - Basic persona interview system
-  - Vanilla implementation without persona leakage prevention
-  - Suitable for initial prototyping
-
-- **`test_qwen2.py`** - Interview system with redaction
-  - Adds persona leakage prevention (redacts ground truth terms)
-  - Ensures fair evaluation by masking target persona keywords
-
-- **`test_qwen3.py`** ⭐ **Recommended**
+- **`test_qwen.py`** ⭐ **Recommended**
   - Complete pipeline with embedding-based evaluation
   - Automatic persona extraction from agent's output
   - Qwen embedding similarity scoring (cosine similarity)
