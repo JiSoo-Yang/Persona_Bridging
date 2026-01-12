@@ -11,7 +11,7 @@ Official implementation of **"The Pragmatic Persona: Discovering LLM Persona thr
 This repository presents a novel framework for discovering latent personas in Large Language Models (LLMs) through **bridging inference** - a cognitive discourse mechanism that captures implicit conceptual relations between utterances. Unlike traditional surface-level approaches, our method reveals how LLMs maintain semantic coherence and express consistent behavioral traits through structured discourse analysis.
 
 <div align="center">
-  <img src="./figures/figure1.pdf" alt="Persona Discovery Framework" width="800"/>
+  <img src="./figures/figure1.png" alt="Persona Discovery Framework" width="800"/>
   <p><i>Figure 1: Comparison of persona inference with and without bridging inference</i></p>
 </div>
 
@@ -24,7 +24,7 @@ This repository presents a novel framework for discovering latent personas in La
 - 📈 **High Performance**: Achieves up to 0.99 cosine similarity with ground-truth personas
 
 <div align="center">
-  <img src="./figures/figure3.pdf" alt="PD-Agent Framework" width="800"/>
+  <img src="./figures/figure3.png" alt="PD-Agent Framework" width="800"/>
   <p><i>Figure 3: Overview of the Persona-Discovering Agent (PD-Agent) framework</i></p>
 </div>
 
@@ -85,8 +85,8 @@ Persona_Bridging/
 ├── bridging_relationships.json  # 7 types of bridging relations
 ├── requirements.txt        # Python dependencies
 ├── figures/               # Paper figures
-│   ├── figure1.pdf
-│   └── figure3.pdf
+│   ├── figure1.png
+│   └── figure3.png
 └── README.md
 ```
 
