@@ -2,7 +2,6 @@
 
 [![Paper](https://img.shields.io/badge/Paper-ICPR%202026-blue)](https://github.com/JiSoo-Yang/Persona_Bridging)
 [![Python](https://img.shields.io/badge/Python-3.8+-green.svg)](https://www.python.org/downloads/)
-[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 Official implementation of **"The Pragmatic Persona: Discovering LLM Persona through Bridging Inference"** accepted at ICPR 2026.
 
