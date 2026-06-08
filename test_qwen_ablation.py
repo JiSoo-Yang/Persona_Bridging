@@ -58,8 +58,17 @@ def save_json(data: Dict, filepath: str):
 # 도구 함수들 (Tool Agent가 사용)
 # ============================================================================
 
-PERSONA_SCHEMA_PATH = "/Users/jisu/Desktop/2025Workshop/persona_schema.json"
-BRIDGING_PATH = "/Users/jisu/Desktop/2025Workshop/bridging_relationships.json"
+# Resolve schema files relative to this script (works from any working directory)
+def _resolve_schema(_name):
+    _here = Path(__file__).resolve()
+    for _base in (_here.parent, _here.parent.parent):
+        _p = _base / "schema" / _name
+        if _p.exists():
+            return str(_p)
+    return str(_here.parent / "schema" / _name)
+
+PERSONA_SCHEMA_PATH = _resolve_schema("persona_schema.json")
+BRIDGING_PATH = _resolve_schema("bridging_relationships.json")
 TOOL_MODEL = 'gpt-4'
 
 def load_persona_definition(dummy: str = "") -> str:
@@ -556,77 +565,76 @@ def compute_embedding_similarity(
 
 def extract_predicted_persona_from_text(text: str) -> Optional[Dict]:
     """
-    ToolAgent의 자유텍스트에서 최종 예측 페르소나 JSON을 최대한 견고하게 추출.
+    ToolAgent의 자유텍스트에서 최종 예측 페르소나 JSON을 견고하게 추출.
+    중첩된 {} 와 문자열 내부의 중괄호까지 올바르게 처리한다.
     """
     if not text:
         return None
-    
-    # 디버깅: 원본 텍스트 일부 출력
+
     print("\n[DEBUG] Extracting persona from text (first 500 chars):")
     print(text[:500])
     print("...\n")
-    
-    # 1) ```json ... ``` 블록 우선
+
+    candidates: List[str] = []
+
+    # 1) ```json ... ``` fenced code blocks
     code_blocks = re.findall(r"```(?:json)?\s*([\s\S]*?)\s*```", text, flags=re.IGNORECASE)
     print(f"[DEBUG] Found {len(code_blocks)} code blocks")
-    
-    for idx, blk in enumerate(reversed(code_blocks)):
-        print(f"[DEBUG] Trying code block {idx + 1}:")
-        print(blk[:200])
-        try:
-            obj = json.loads(blk)
-            if isinstance(obj, dict) and "social_role" in obj:
-                print("[DEBUG] ✅ Successfully extracted from code block!")
-                return obj
-        except json.JSONDecodeError as e:
-            print(f"[DEBUG] ❌ JSON decode failed: {e}")
-            continue
+    candidates.extend(code_blocks)
 
-    # 2) "social_role" 키가 포함된 JSON 객체 찾기 (개선된 버전)
-    patterns = [
-        r'\{[^{}]*"social_role"[^{}]*"personality"[^{}]*"background"[^{}]*"interests"[^{}]*\}',
-        r'\{[\s\S]{0,2000}?"social_role"[\s\S]{0,2000}?\}',
-    ]
-    
-    for pattern in patterns:
-        matches = re.findall(pattern, text, flags=re.IGNORECASE)
-        print(f"[DEBUG] Pattern matched {len(matches)} objects")
-        
-        for match in reversed(matches):
-            print(f"[DEBUG] Trying pattern match:")
-            print(match[:200])
-            try:
-                obj = json.loads(match)
-                if isinstance(obj, dict) and "social_role" in obj:
-                    print("[DEBUG] ✅ Successfully extracted from pattern match!")
-                    return obj
-            except json.JSONDecodeError as e:
-                print(f"[DEBUG] ❌ JSON decode failed: {e}")
+    # 2) Balanced-brace scan: extract every top-level {...} object.
+    #    Correctly handles nested objects and braces inside strings,
+    #    unlike a non-greedy regex (which stops at the first closing brace).
+    def _balanced_objects(s: str) -> List[str]:
+        objs: List[str] = []
+        depth = 0
+        start = None
+        in_str = False
+        esc = False
+        for i, ch in enumerate(s):
+            if in_str:
+                if esc:
+                    esc = False
+                elif ch == "\\":
+                    esc = True
+                elif ch == '"':
+                    in_str = False
                 continue
-    
-    # 3) 마지막 시도: "FINAL PREDICTION" 이후 텍스트에서 JSON 찾기
-    final_pred_match = re.search(r'FINAL PREDICTION[:\s]*(.+)', text, flags=re.IGNORECASE | re.DOTALL)
-    if final_pred_match:
-        remaining_text = final_pred_match.group(1)
-        print(f"[DEBUG] Found 'FINAL PREDICTION' section:")
-        print(remaining_text[:300])
-        
-        json_match = re.search(r'\{[\s\S]*?"social_role"[\s\S]*?\}', remaining_text)
-        if json_match:
-            try:
-                obj = json.loads(json_match.group(0))
-                if isinstance(obj, dict):
-                    print("[DEBUG] ✅ Successfully extracted from FINAL PREDICTION section!")
-                    return obj
-            except json.JSONDecodeError as e:
-                print(f"[DEBUG] ❌ JSON decode failed: {e}")
-    
+            if ch == '"':
+                in_str = True
+            elif ch == "{":
+                if depth == 0:
+                    start = i
+                depth += 1
+            elif ch == "}":
+                if depth > 0:
+                    depth -= 1
+                    if depth == 0 and start is not None:
+                        objs.append(s[start:i + 1])
+                        start = None
+        return objs
+
+    candidates.extend(_balanced_objects(text))
+    print(f"[DEBUG] Found {len(candidates)} candidate JSON object(s)")
+
+    # 3) Try candidates last-first (the final prediction usually comes last).
+    seen = set()
+    for cand in reversed(candidates):
+        cand = cand.strip()
+        if not cand or cand in seen:
+            continue
+        seen.add(cand)
+        try:
+            obj = json.loads(cand)
+        except json.JSONDecodeError:
+            continue
+        if isinstance(obj, dict) and "social_role" in obj:
+            print("[DEBUG] ✅ Successfully extracted persona JSON!")
+            return obj
+
     print("[DEBUG] ❌ Could not extract persona JSON from any method")
     return None
 
-# ============================================================================
-# Hugging Face 모델 래퍼 (CPU 안전, CoT 태그 금지 + 재시도)
-# ============================================================================
 
 class HuggingFaceModelWrapper:
     """

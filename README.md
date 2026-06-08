@@ -1,13 +1,13 @@
 # The Pragmatic Persona: Discovering LLM Persona through Bridging Inference
 
 [![Paper](https://img.shields.io/badge/Paper-ICPR%202026-blue)](https://github.com/JiSoo-Yang/Persona_Bridging)
-[![Python](https://img.shields.io/badge/Python-3.8+-green.svg)](https://www.python.org/downloads/)
+[![Python](https://img.shields.io/badge/Python-3.10+-green.svg)](https://www.python.org/downloads/)
 
 Official implementation of **"The Pragmatic Persona: Discovering LLM Persona through Bridging Inference"** accepted at ICPR 2026.
 
-## 📖 Overview
+## Overview
 
-This repository presents a novel framework for discovering latent personas in Large Language Models (LLMs) through **bridging inference** - a cognitive discourse mechanism that captures implicit conceptual relations between utterances. Unlike traditional surface-level approaches, our method reveals how LLMs maintain semantic coherence and express consistent behavioral traits through structured discourse analysis.
+This repository presents a framework for discovering latent personas in Large Language Models (LLMs) through **bridging inference** — a cognitive discourse mechanism that captures implicit conceptual relations between utterances. Unlike surface-level approaches, our method reveals how LLMs maintain semantic coherence and express consistent behavioral traits through structured discourse analysis.
 
 <div align="center">
   <img src="./figures/figure1.png" alt="Persona Discovery Framework" width="800"/>
@@ -16,27 +16,48 @@ This repository presents a novel framework for discovering latent personas in La
 
 ### Key Features
 
-- 🧠 **Cognitively Grounded**: Based on bridging inference from cognitive discourse theory
-- 📊 **Graph-based Analysis**: Constructs semantic knowledge graphs from implicit relations
-- 🎯 **Multi-dimensional**: Discovers personas across 4 dimensions (Social Role, Personality, Background, Interests)
-- 🔧 **Model Agnostic**: Works with various LLM scales (1.7B to 80B parameters)
-- 📈 **High Performance**: Achieves up to 0.99 cosine similarity with ground-truth personas
+- **Cognitively Grounded**: Based on bridging inference from cognitive discourse theory
+- **Graph-based Analysis**: Constructs semantic knowledge graphs from implicit relations
+- **Multi-dimensional**: Discovers personas across 4 dimensions (Social Role, Personality, Background, Interests)
+- **Model Agnostic**: Works with various LLM scales (1.7B to 80B parameters)
 
 <div align="center">
   <img src="./figures/figure3.png" alt="PD-Agent Framework" width="800"/>
   <p><i>Figure 3: Overview of the Persona-Discovering Agent (PD-Agent) framework</i></p>
 </div>
 
-## 🚀 Quick Start
+## Repository Structure
 
-### Prerequisites
-
-```bash
-# Python 3.8+
-pip install -r requirements.txt
+```
+Persona_Bridging/
+├── test/
+│   ├── test_ds.py              # DeepSeek target-model experiment
+│   ├── test_llama.py           # Llama target-model experiment
+│   └── test_qwen.py            # Qwen target-model experiment
+├── test_qwen_ablation.py       # Qwen ablation study
+├── test_llama_ablation.py      # Llama ablation study
+├── schema/
+│   ├── persona_schema.json         # 4-dimensional persona schema
+│   └── bridging_relationships.json # 7 bridging relation types
+├── figures/                    # Paper figures
+├── requirements.txt            # Python dependencies
+└── README.md
 ```
 
-### Installation
+## Hardware & Environment
+
+Results in the paper were produced on the following configuration:
+
+| Component | Specification |
+|-----------|---------------|
+| OS | Linux |
+| CPU | 2 × Intel(R) Xeon(R) Gold 6426Y (32 cores / 64 threads) |
+| RAM | 256 GB |
+| GPU | 4 × NVIDIA RTX Pro 6000 MaxQ (Blackwell), 96 GB VRAM each |
+
+> A CUDA-capable GPU is recommended for running open-source target models (Qwen, Llama, DeepSeek) locally. The PD-Agent reasoning/tool backbone runs through the OpenAI API.
+
+## Installation
 
 ```bash
 git clone https://github.com/JiSoo-Yang/Persona_Bridging.git
@@ -44,56 +65,68 @@ cd Persona_Bridging
 pip install -r requirements.txt
 ```
 
-### Basic Usage
+Python 3.10+ is recommended.
 
-#### 1. Using DeepSeek Model
+## API Keys (.env setup)
+
+The experiments use the OpenAI API for the PD-Agent (tool/reasoning) backbone and Hugging Face for loading open-source target models. Create a `.env` file **in the repository root**:
+
+```bash
+# .env
+OPENAI_API_KEY=your-openai-key-here
+HF_TOKEN=your-huggingface-token-here   # required for gated models (e.g. Llama)
+```
+
+> `.env` is git-ignored and must **not** be committed. Each script automatically loads it at startup.
+
+## Usage
+
+Each experiment script is self-contained. The target model and runtime settings are defined **at the bottom of each script** (no command-line flags). To change them, edit these variables, e.g. in `test/test_qwen.py`:
 
 ```python
-python test_ds.py \
-    --model_name "deepseek-ai/DeepSeek-V3" \
-    --output_dir "./results/deepseek" \
-    --num_interviews 5
+TARGET_MODEL = "Qwen/Qwen3-1.7B"   # target LLM to probe
+num_questions = 3                  # interview turns
+device = "cpu"                     # set to "cuda" to use GPU (recommended)
 ```
 
-#### 2. Using Llama Model
+Then run **from the repository root** so that `.env` and the `schema/` files are found:
 
-```python
-python test_llama.py \
-    --model_name "meta-llama/Llama-3.1-70B-Instruct" \
-    --output_dir "./results/llama" \
-    --num_interviews 5
+```bash
+# Qwen target
+python test/test_qwen.py
+
+# Llama target
+python test/test_llama.py
+
+# DeepSeek target
+python test/test_ds.py
 ```
 
-#### 3. Using Qwen Model
-
-```python
-python test_qwen.py \
-    --model_name "Qwen/Qwen2.5-72B-Instruct" \
-    --output_dir "./results/qwen" \
-    --num_interviews 5
-```
-
-## 📊 Project Structure
+At the end of a run, the total execution time is printed:
 
 ```
-Persona_Bridging/
-├── test_ds.py              # DeepSeek model implementation
-├── test_llama.py           # Llama model implementation
-├── test_qwen.py            # Qwen model implementation
-├── persona_schema.json     # 4-dimensional persona schema definition
-├── bridging_relationships.json  # 7 types of bridging relations
-├── requirements.txt        # Python dependencies
-├── figures/               # Paper figures
-│   ├── figure1.png
-│   └── figure3.png
-└── README.md
+⏱️  Total execution time: XX.XX seconds
 ```
 
-## 🧩 Framework Components
+### Outputs
 
-### 1. Persona Schema
+Results are written to an `outputs/` directory, including:
 
-Our framework uses a 4-dimensional schema covering:
+- `outputs/interview_results_<model>.json` — interview dialogue
+- `outputs/bridging_results.json` — extracted bridging relations
+- `outputs/graph_structure.json` — semantic graph data
+- `outputs/persona_similarity.json` — predicted-vs-ground-truth similarity
+
+### Ablation studies
+
+```bash
+python test_qwen_ablation.py
+python test_llama_ablation.py
+```
+
+## Framework Components
+
+### 1. Persona Schema (`schema/persona_schema.json`)
 
 | Dimension | Subcategories | Examples |
 |-----------|--------------|----------|
@@ -102,34 +135,24 @@ Our framework uses a 4-dimensional schema covering:
 | **Background** | Education, Location, Family | PhD, Urban, Single |
 | **Interests** | Hobbies, Values, Communication Style | Reading, Integrity, Direct |
 
-### 2. Bridging Relations
+### 2. Bridging Relations (`schema/bridging_relationships.json`)
 
 Seven canonical bridging relation types based on cognitive discourse theory:
 
-#### Mereological Relations
-- **part-of**: Physical/conceptual component (e.g., engine → car)
-- **member-of**: Element belonging to a set (e.g., student → class)
-
-#### Frame-related Relations
-- **instrument**: Tool required for action (e.g., knife → cutting)
-- **theme**: Central entity in an event (e.g., topic → discussion)
-- **cause-of**: Causal dependency (e.g., effort → success)
-- **in**: Spatial/situational containment (e.g., book → library)
-- **temporal**: Sequential/simultaneous occurrence (e.g., morning → breakfast)
+- **Mereological**: `part-of` (engine → car), `member-of` (student → class)
+- **Frame-related**: `instrument` (knife → cutting), `theme` (topic → discussion), `cause-of` (effort → success), `in` (book → library), `temporal` (morning → breakfast)
 
 ### 3. PD-Agent Pipeline
 
-1. **Interactive Interview**: Generates 3-5 dialogue turns with Target LLM
-2. **Bridging Extraction**: Identifies implicit conceptual relations using few-shot learning
-3. **Graph Construction**: Builds semantic graph G = (V, E) with weighted edges
+1. **Interactive Interview**: Generates 3–5 dialogue turns with the target LLM
+2. **Bridging Extraction**: Identifies implicit conceptual relations via few-shot learning
+3. **Graph Construction**: Builds a semantic graph G = (V, E)
 4. **Centrality Analysis**: Computes node importance via degree centrality
 5. **Persona Inference**: Predicts persona attributes from graph structure
 
-## 📈 Experimental Results
+## Experimental Results
 
-Our framework was evaluated across 6 reasoning backbones and multiple target LLMs:
-
-### Performance Summary
+The framework was evaluated across 6 reasoning backbones and multiple target LLMs (see Table 3 in the paper).
 
 | Backbone | Small Targets (Avg.) | Large Targets (Avg.) | Overall |
 |----------|---------------------|---------------------|---------|
@@ -140,58 +163,10 @@ Our framework was evaluated across 6 reasoning backbones and multiple target LLM
 | **Claude 3.5 Sonnet** | 0.89 | 0.93 | **0.91** |
 | **Llama-3.1-70B** | 0.88 | 0.92 | **0.90** |
 
-*Similarity scores represent cosine similarity with ground-truth personas*
-
-### Key Findings
-
-- ✅ **+15% improvement** over frequency-based baselines
-- ✅ **Scales favorably** with larger target models (30B-80B)
-- ✅ **Reasoning backbone matters**: o1-mini achieves best results
-- ✅ **Consistent performance**: Standard deviation < 0.03 across runs
-
-## 🛠️ Configuration
-
-### Model Configuration
-
-Each test script supports customizable parameters:
-
-```python
-# Model settings
-MODEL_NAME = "deepseek-ai/DeepSeek-V3"  # Target LLM
-DEVICE = "cuda"  # or "cpu"
-MAX_NEW_TOKENS = 512
-TEMPERATURE = 0.7
-
-# Interview settings
-NUM_INTERVIEWS = 5
-MAX_TURNS = 5
-
-# Agent settings
-TOOL_MODEL = "gpt-4"  # PD-Agent backbone
-```
-
-### Persona Schema Customization
-
-Edit `persona_schema.json` to add custom persona dimensions:
-
-```json
-{
-  "structure": {
-    "social_role": {
-      "description": "Professional occupation or societal role",
-      "categories": {
-        "your_category": {
-          "description": "Your category description",
-          "examples": ["Role1", "Role2"]
-        }
-      }
-    }
-  }
-}
-```
+*Cosine similarity with ground-truth personas.*
 
 ---
 
 <div align="center">
-  <sub>Built with ❤️ by the CAU IMR Lab</sub>
+  <sub>Built by the CAU IMR Lab</sub>
 </div>

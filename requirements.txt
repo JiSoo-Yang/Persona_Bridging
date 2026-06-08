@@ -1,0 +1,15 @@
+# Core deep learning / model loading
+torch>=2.1.0
+transformers>=4.44.0
+huggingface_hub>=0.24.0
+
+# LangChain / agent stack (PD-Agent reasoning backbone)
+langchain>=0.3.0
+langchain-core>=0.3.0
+langchain-openai>=0.2.0
+langgraph>=0.2.0
+
+# Graph construction, numerics, and visualization
+networkx>=3.1
+numpy>=1.24.0
+matplotlib>=3.7.0

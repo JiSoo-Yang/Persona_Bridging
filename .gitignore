@@ -1,0 +1,18 @@
+# Secrets — never commit API keys
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# Experiment outputs
+outputs/
+results/
+
+# OS / editor cruft
+.DS_Store
+.idea/
+.vscode/

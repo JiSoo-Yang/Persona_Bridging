@@ -53,8 +53,17 @@ def save_json(data: Dict, filepath: str):
 # 도구 함수들 (Tool Agent가 사용)
 # ============================================================================
 
-PERSONA_SCHEMA_PATH = "/Users/jisu/Desktop/2025Workshop/persona_schema.json"
-BRIDGING_PATH = "/Users/jisu/Desktop/2025Workshop/bridging_relationships.json"
+# Resolve schema files relative to this script (works from any working directory)
+def _resolve_schema(_name):
+    _here = Path(__file__).resolve()
+    for _base in (_here.parent, _here.parent.parent):
+        _p = _base / "schema" / _name
+        if _p.exists():
+            return str(_p)
+    return str(_here.parent / "schema" / _name)
+
+PERSONA_SCHEMA_PATH = _resolve_schema("persona_schema.json")
+BRIDGING_PATH = _resolve_schema("bridging_relationships.json")
 TOOL_MODEL = 'gpt-4'
 
 def load_persona_definition(dummy: str = "") -> str:
